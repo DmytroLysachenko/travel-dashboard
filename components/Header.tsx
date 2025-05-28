@@ -1,5 +1,5 @@
-import React from "react";
 import { useLocation } from "react-router";
+
 import { cn } from "~/lib/utils";
 
 interface Props {

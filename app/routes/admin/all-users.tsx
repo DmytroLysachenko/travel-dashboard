@@ -1,12 +1,11 @@
 import { Header } from "components";
-import React from "react";
 
 const AllUsers = () => {
   return (
     <main>
       <Header
-        title="Trips Page"
-        description="Track activity, treds and popular destinations."
+        title="All users Page"
+        description="Track activity, trends and popular destinations."
       />
     </main>
   );
