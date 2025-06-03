@@ -1,6 +1,7 @@
 import { ID, OAuthProvider, Query } from "appwrite";
-import { account, database, appwriteConfig } from "./client";
 import { redirect } from "react-router";
+
+import { account, database, appwriteConfig } from "~/appwrite/client";
 
 export const getExistingUser = async (id: string) => {
   try {
@@ -19,11 +20,9 @@ export const getExistingUser = async (id: string) => {
 export const storeUserData = async () => {
   try {
     const user = await account.get();
-
     if (!user) throw new Error("User not found");
 
     const { providerAccessToken } = (await account.getSession("current")) || {};
-
     const profilePicture = providerAccessToken
       ? await getGooglePicture(providerAccessToken)
       : null;
@@ -36,6 +35,7 @@ export const storeUserData = async () => {
         accountId: user.$id,
         email: user.email,
         name: user.name,
+        status: "user",
         imageUrl: profilePicture,
         joinedAt: new Date().toISOString(),
       }

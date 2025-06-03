@@ -1,11 +1,17 @@
 import { Header, StatsCard, TripCard } from "components";
-import { dashboardStats, user, allTrips } from "~/constants";
+import { getUser } from "~/appwrite/auth";
+import { dashboardStats, allTrips } from "~/constants";
+import type { Route } from "./+types/dashboard";
 
-const Dashboard = () => {
+export const clientLoader = async () => await getUser();
+
+const Dashboard = ({ loaderData }: Route.ComponentProps) => {
+  const user = loaderData as User | null;
+
   return (
     <main className="dashboard wrapper">
       <Header
-        title={`Welcome ${user.name}`}
+        title={`Welcome, ${user?.name.split(" ")[0] || "User"}`}
         description="Your dashboard"
       />
       <section className="flex flex-col gap-6">
