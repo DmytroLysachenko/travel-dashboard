@@ -1,9 +1,30 @@
 import { reactRouter } from "@react-router/dev/vite";
+import {
+  sentryReactRouter,
+  type SentryReactRouterBuildOptions,
+} from "@sentry/react-router";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), , tsconfigPaths()],
-  ssr: { noExternal: [/@syncfusion/] },
+const sentryConfig: SentryReactRouterBuildOptions = {
+  org: "my-own-company-c1",
+  project: "javascript-react",
+
+  // An auth token is required for uploading source maps.
+  authToken:
+    "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",
+  // ...
+};
+
+export default defineConfig((config) => {
+  return {
+    plugins: [
+      tailwindcss(),
+      tsconfigPaths(),
+      reactRouter(),
+      sentryReactRouter(sentryConfig, config),
+    ],
+    ssr: { noExternal: [/@syncfusion/] },
+  };
 });
