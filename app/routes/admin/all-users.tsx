@@ -4,9 +4,20 @@ import {
   ColumnsDirective,
   GridComponent,
 } from "@syncfusion/ej2-react-grids";
-import { cn, formatDate } from "~/lib/utils";
 
-const AllUsers = () => {
+import { cn, formatDate } from "~/lib/utils";
+import { getAllUsers } from "~/appwrite/auth";
+import type { Route } from "./+types/all-users";
+
+export const loader = async () => {
+  const { users, total } = await getAllUsers(10, 0);
+
+  return { users, total };
+};
+
+const AllUsers = ({ loaderData }: Route.ComponentProps) => {
+  const { users, total } = loaderData;
+
   return (
     <main className="all-users wrapper">
       <Header
@@ -15,35 +26,7 @@ const AllUsers = () => {
       />
       <GridComponent
         gridLines="None"
-        dataSource={[
-          {
-            id: 1,
-            name: "John Doe",
-            email: "sadawd",
-            imageUrl: "/assets/images/david.webp",
-            dateJoined: formatDate("2025-01-01"),
-            itineraryCreated: 5,
-            status: "user",
-          },
-          {
-            id: 2,
-            name: "John Doe",
-            email: "sadawd",
-            imageUrl: "/assets/images/david.webp",
-            dateJoined: formatDate("2025-01-01"),
-            itineraryCreated: 5,
-            status: "user",
-          },
-          {
-            id: 3,
-            name: "John Doe",
-            email: "sadawd",
-            imageUrl: "/assets/images/david.webp",
-            dateJoined: formatDate("2025-01-01"),
-            itineraryCreated: 5,
-            status: "user",
-          },
-        ]}
+        dataSource={users}
       >
         <ColumnsDirective>
           <ColumnDirective
@@ -65,14 +48,17 @@ const AllUsers = () => {
           <ColumnDirective
             field="email"
             headerText="Email"
-            width="150"
+            width="200"
             textAlign="Left"
           />
           <ColumnDirective
-            field="dateJoined"
+            field="joinedAt"
             headerText="Date Joined"
             width="120"
             textAlign="Left"
+            template={({ joinedAt }: { joinedAt: string }) =>
+              formatDate(joinedAt)
+            }
           />
           <ColumnDirective
             field="itineraryCreated"
