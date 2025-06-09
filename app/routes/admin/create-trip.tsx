@@ -1,17 +1,18 @@
 import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
-import type { Route } from "./+types/create-trip";
-import { comboBoxItems, selectItems } from "~/constants";
-import { cn, formatKey } from "~/lib/utils";
+import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
+import { useNavigate } from "react-router";
 import {
   LayerDirective,
   LayersDirective,
   MapsComponent,
 } from "@syncfusion/ej2-react-maps";
 import React, { useState } from "react";
+
+import type { Route } from "./+types/create-trip";
+import { comboBoxItems, selectItems } from "~/constants";
+import { cn, formatKey } from "~/lib/utils";
 import { world_map } from "~/constants/world_map";
-import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { account } from "~/appwrite/client";
-import { useNavigate } from "react-router";
 import { Header } from "components";
 
 export const loader = async () => {
