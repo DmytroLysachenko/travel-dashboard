@@ -1,8 +1,7 @@
-//@ts-nocheck
+// @ts-nocheck
 
-import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import { Link } from "react-router";
-
+import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import NavItems from "./NavItems";
 
 const MobileSidebar = () => {
@@ -18,34 +17,33 @@ const MobileSidebar = () => {
         <Link to="/">
           <img
             src="/assets/icons/logo.svg"
-            alt="logo"
+            alt="Logo"
             className="size-[30px]"
           />
 
-          <h1>TravelApp</h1>
+          <h1>Tourvisto</h1>
         </Link>
 
         <button onClick={toggleSidebar}>
           <img
             src="/assets/icons/menu.svg"
             alt="menu"
-            className="size-[30px]"
+            className="size-7"
           />
         </button>
       </header>
 
-      <SidebarComponent
-        width={170}
-        ref={(node) => (sidebar = node)}
+      {/* <SidebarComponent
+        width={270}
+        ref={(Sidebar) => (sidebar = Sidebar)}
         created={() => sidebar.hide()}
-        closeOnDocumentClick
-        showBackdrop
+        closeOnDocumentClick={true}
+        showBackdrop={true}
         type="over"
       >
         <NavItems handleClick={toggleSidebar} />
-      </SidebarComponent>
+      </SidebarComponent> */}
     </div>
   );
 };
-
 export default MobileSidebar;
