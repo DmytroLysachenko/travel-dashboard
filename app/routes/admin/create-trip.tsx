@@ -16,7 +16,9 @@ import { account } from "~/appwrite/client";
 import { Header } from "components";
 
 export const loader = async () => {
-  const response = await fetch("https://restcountries.com/v3.1/all");
+  const response = await fetch(
+    "https://restcountries.com/v3.1/all?fields=name,latlng,flag,maps"
+  );
   const data = await response.json();
 
   return data.map((country: any) => ({
@@ -63,7 +65,9 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
       setLoading(false);
       return;
     }
+
     const user = await account.get();
+
     if (!user.$id) {
       console.error("User not authenticated");
       setLoading(false);
@@ -99,6 +103,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
   const handleChange = (key: keyof TripFormData, value: string | number) => {
     setFormData({ ...formData, [key]: value });
   };
+
   const countryData = countries.map((country) => ({
     text: country.name,
     value: country.value,

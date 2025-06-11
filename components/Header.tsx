@@ -28,21 +28,21 @@ const Header = ({ title, description, ctaText, ctaUrl }: Props) => {
         </h1>
         <p
           className={cn(
-            "text-gray-100 font-normal md:text-lg",
-            location.pathname === "/" ? "text-base" : "text-sm"
+            "text-gray-100 font-normal",
+            location.pathname === "/"
+              ? "text-base md:text-lg"
+              : "text-sm md:text-lg"
           )}
         >
           {description}
         </p>
       </article>
+
       {ctaText && ctaUrl && (
-        <Link
-          to={ctaUrl}
-          className="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        >
+        <Link to={ctaUrl}>
           <ButtonComponent
             type="button"
-            className="button-class !h-11 !w-full md:w-[240px]"
+            className="button-class !h-11 !w-full md:w-[260px]"
           >
             <img
               src="/assets/icons/plus.svg"
