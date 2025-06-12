@@ -18,7 +18,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   } = await request.json();
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-  const unsplashApiKey = process.env.UNSPLASH_API_KEY!;
+  const unsplashApiKey = process.env.UNSPLASH_ACCESS_KEY!;
 
   try {
     const prompt = `Generate a ${numberOfDays}-day travel itinerary for ${country} based on the following user information:
@@ -70,7 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const textResult = await genAI
       .getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash-preview-05-20",
       })
       .generateContent([prompt]);
 
@@ -78,19 +78,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const imageResponse = await fetch(
       `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashApiKey}`
-    );
+    ).then(async (res) => res.json());
 
-    const imageUrls: string[] = (await imageResponse.json()).results.slice(
-      0,
-      3
-    );
+    const imageUrls: string[] = imageResponse.results
+      .slice(0, 3)
+      .map((image: { urls: { small: string } }) => image.urls.small);
 
     const result = await database.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.tripsCollectionId,
       ID.unique(),
       {
-        tripDetails: JSON.stringify(trip),
+        tripDetail: JSON.stringify(trip),
         imageUrls,
         userId,
         createdAt: new Date().toISOString(),
