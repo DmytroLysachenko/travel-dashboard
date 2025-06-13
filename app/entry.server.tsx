@@ -20,15 +20,11 @@ function handleRequest(
   responseHeaders: Headers,
   routerContext: EntryContext,
   loadContext: AppLoadContext
-  // If you have middleware enabled:
-  // loadContext: unstable_RouterContextProvider
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     let userAgent = request.headers.get("user-agent");
 
-    // Ensure requests from bots and SPA Mode renders wait for all content to load before responding
-    // https://react.dev/reference/react-dom/server/renderToPipeableStream#waiting-for-all-content-to-load-for-crawlers-and-static-generation
     let readyOption: keyof RenderToPipeableStreamOptions =
       (userAgent && isbot(userAgent)) || routerContext.isSpaMode
         ? "onAllReady"
@@ -61,27 +57,19 @@ function handleRequest(
         },
         onError(error: unknown) {
           responseStatusCode = 500;
-          // Log streaming rendering errors from inside the shell.  Don't log
-          // errors encountered during initial shell rendering since they'll
-          // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
             console.error(error);
           }
         },
       }
     );
-
-    // Abort the rendering stream after the `streamTimeout` so it has time to
-    // flush down the rejected boundaries
     setTimeout(abort, streamTimeout + 1000);
   });
 }
 
 export const handleError: HandleErrorFunction = (error, { request }) => {
-  // React Router may abort some interrupted requests, don't log those
   if (!request.signal.aborted) {
     Sentry.captureException(error);
-    // optionally log the error so you can see it
     console.error(error);
   }
 };
